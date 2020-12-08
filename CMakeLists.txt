@@ -21,6 +21,7 @@ target_sources(streamed
         main.cxx
 
         service/client.cxx service/client.hxx
+        service/system.cxx service/system.hxx
 )
 
 target_include_directories(streamed
