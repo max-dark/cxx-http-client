@@ -4,6 +4,15 @@ project(Streamed LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# select libs
+set(LIBS_LIST)
+
+find_package(Threads REQUIRED)
+
+if (WIN32)
+    list(APPEND LIBS_LIST ws2_32)
+endif()
+
 
 add_executable(streamed)
 
@@ -12,4 +21,7 @@ target_sources(streamed
         main.cxx
 )
 
-
+target_link_libraries(streamed
+    PRIVATE
+        ${LIBS_LIST} Threads::Threads
+)
