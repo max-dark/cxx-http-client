@@ -33,6 +33,9 @@ public:
     Client(Client&& other) noexcept;
     Client& operator=(Client&& other) noexcept;
 
+    /// @brief try resolve ip by host name
+    bool try_resolve();
+
     /// @brief main cycle
     void run();
 
