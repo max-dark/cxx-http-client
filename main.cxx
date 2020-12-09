@@ -5,6 +5,7 @@
 #include <service/system.hxx>
 
 #include <iostream>
+#include <thread>
 
 int main(int argc, char** argv)
 {
@@ -13,6 +14,40 @@ int main(int argc, char** argv)
     if (app.startUp())
     {
         std::clog << "Start Up" << std::endl;
+
+        // TODO: parse command line args
+        // TODO: extract page from address
+        Client client{"www.yandex.ru", 80, Client::Interval{1000}};
+
+        if (client.try_resolve())
+        {
+            std::clog << "IP resolved / start worker" << std::endl;
+            auto worker = std::thread{&Client::run, &client};
+
+            while (!client.is_running())
+            {
+                // wait for start up
+                std::this_thread::yield();
+            }
+
+            auto run = true;
+
+            while (run)
+            {
+                if (app.hasKey())
+                {
+                    if (27 == app.getKey())
+                        run = false;
+                }
+            }
+
+            client.stop();
+            worker.join();
+        }
+        else
+        {
+            std::cerr << "Cant resolve ip address" << std::endl;
+        }
     }
     else
     {
@@ -21,4 +56,3 @@ int main(int argc, char** argv)
 
     return app.shutdown();
 }
-
