@@ -100,19 +100,21 @@ void Client::run()
 
                 auto send_status = send(handle, header.c_str(), header.size(), 0);
 
-                char buff[1024];
-                bool have_data;
+                constexpr auto SZ = 1023;
+                char buff[SZ + 1];
+                bool have_data, more_data;
                 do
                 {
-                    auto recv_status = recv(handle, buff, 1023, 0);
-                    have_data = (recv_status > 0);
+                    auto recv_status = recv(handle, buff, SZ, 0);
+                    have_data = (recv_status > 0) && (recv_status != SOCKET_ERROR);
+                    more_data = recv_status == SZ;
                     if (have_data)
                     {
                         buff[recv_status] = 0;
                         response << buff;
                     }
                 }
-                while (have_data);
+                while (more_data);
 
                 // todo: send response to main
             }
