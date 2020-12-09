@@ -2,7 +2,8 @@
 // Created by max on 08.12.2020.
 //
 
-#include "client.hxx"
+#include <service/client.hxx>
+#include <service/queue.hxx>
 
 #include <atomic>
 #include <mutex>
@@ -63,7 +64,7 @@ Client& Client::operator=(Client&& other) noexcept
     return *this;
 }
 
-void Client::run()
+void Client::run(std::shared_ptr<Queue> queue)
 {
     std::ostringstream request, response;
 
@@ -116,7 +117,7 @@ void Client::run()
                 }
                 while (more_data);
 
-                // todo: send response to main
+                queue->push(response.str());
             }
 
             // select next ip

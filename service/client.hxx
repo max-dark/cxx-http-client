@@ -8,6 +8,9 @@
 #include <string>
 #include <cstdint>
 #include <chrono>
+#include <memory>
+
+class Queue;
 
 /// @brief HTTP Client
 class Client
@@ -37,7 +40,7 @@ public:
     bool try_resolve();
 
     /// @brief main cycle
-    void run();
+    void run(std::shared_ptr<Queue> queue);
 
     /// @brief send stop notify to this client
     void stop();
