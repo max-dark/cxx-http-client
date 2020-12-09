@@ -22,6 +22,7 @@ target_sources(streamed
 
         service/client.cxx service/client.hxx
         service/system.cxx service/system.hxx
+        service/queue.cxx service/queue.hxx
 )
 
 target_include_directories(streamed
